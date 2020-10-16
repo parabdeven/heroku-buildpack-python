@@ -37,6 +37,8 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     COLLECTSTATIC_LOG=$(mktemp)
 
     python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+    python "$MANAGE_FILE" makemigrations
+    python "$MANAGE_FILE" migrate
     COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
     set -e
